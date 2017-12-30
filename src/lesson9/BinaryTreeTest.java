@@ -1,20 +1,32 @@
 package lesson9;
 
+import java.util.Stack;
+
 public class BinaryTreeTest {
 	public static void main(String[] args) {
-		BinaryTree<Integer> tree = new BinaryTree<Integer>();
-		tree.insert(8);
-		tree.insert(6);
-		tree.insert(5);
-		tree.insert(2);
-		tree.insert(3);
-		tree.insert(7);
-		tree.insert(1);
-		tree.insert(4);
-		System.out.println(tree.size());
-		System.out.println(tree.height());
-	}
+		// BinaryTree<Integer> tree = new BinaryTree<Integer>();
+		// tree.insert(8);
+		// tree.insert(6);
+		// tree.insert(5);
+		// tree.insert(2);
+		// tree.insert(3);
+		// tree.insert(7);
+		// tree.insert(1);
+		// tree.insert(4);
 
+		BinaryTree<String> tree = new BinaryTree<String>();
+		tree.insert("5");
+		tree.insert("6");
+		tree.insert("7");
+		tree.insert("8");
+		tree.insert("3");
+		tree.insert("2");
+		tree.insert("4");
+		tree.insert("1");
+		tree.traverseMid(tree.getRoot());
+		System.out.println();
+		tree.iterateMid(tree.getRoot());
+	}
 }
 
 class BinaryTree<T extends Comparable<T>> {
@@ -58,7 +70,83 @@ class BinaryTree<T extends Comparable<T>> {
 		}
 
 		return root.height();
+	}
 
+	/** 递归遍历--前序 */
+	public void traversePre(Node<?> node) {
+		if (node == null) {
+			return;
+		}
+		System.out.print(node.getData() + ", ");
+		traversePre(node.getLeft());
+		traversePre(node.getRight());
+	}
+
+	/** 递归遍历--中序 */
+	public void traverseMid(Node<?> node) {
+		if (node == null) {
+			return;
+		}
+
+		traverseMid(node.getLeft());
+		System.out.print(node.getData() + ", ");
+		traverseMid(node.getRight());
+	}
+
+	/** 递归遍历--后序 */
+	public void traverseAfter(Node<?> node) {
+		if (node == null) {
+			return;
+		}
+
+		traverseAfter(node.getLeft());
+		traverseAfter(node.getRight());
+		System.out.print(node.getData() + ", ");
+	}
+
+	/** 迭代遍历--前序 */
+	public void iteratePre(Node<?> root) {
+		Stack<Node<?>> stack = new Stack<Node<?>>();
+		if (root == null) {
+			return;
+		}
+
+		stack.push(root);
+		while (!stack.isEmpty()) {
+			Node<?> item = stack.pop();
+			System.out.print(item.getData() + ", ");
+			if (item.getRight() != null) {
+				stack.push(item.getRight());
+			}
+			if (item.getLeft() != null) {
+				stack.push(item.getLeft());
+			}
+		}
+	}
+
+	public void iterateMid(Node<?> root) {
+		Stack<Node<?>> stack = new Stack<Node<?>>();
+		if (root == null) {
+			return;
+		}
+
+		pushLeft2Stack(root, stack);
+		Node<?> node = stack.pop();
+		while (node != null) {
+			System.out.print(node.getData() + ", ");
+			pushLeft2Stack(node.getRight(), stack);
+			if (stack.size() == 0) {
+				break;
+			}
+			node = stack.pop();
+		}
+	}
+
+	private void pushLeft2Stack(Node<?> node, Stack<Node<?>> stack) {
+		while (node != null) {
+			stack.push(node);
+			node = node.getLeft();
+		}
 	}
 
 }
@@ -125,9 +213,7 @@ class Node<T extends Comparable<T>> {
 			} else {
 				this.right.insert(data);
 			}
-		}
-
-		if (this.data.compareTo(data) >= 0) {
+		} else if (this.data.compareTo(data) >= 0) {
 			if (this.left == null) {
 				this.left = node;
 			} else {

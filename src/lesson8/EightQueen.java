@@ -16,12 +16,9 @@ public class EightQueen {
 		}
 		for (int i = 0; i < 8; i++) {
 			Queen queen = new Queen(row, i);
-			boolean flag = stack.contains(queen);
-			stack.push(queen); // 加入尝试
-			if (!flag) { // 满足条件，则递归寻找下一个皇后的位置
-				find(row + 1);
-			} else {
-				stack.pop(); // 不满足条件，继续寻找本皇后的位置
+			if (!stack.contains(queen)) {
+				stack.push(queen); // 满足条件，推入栈
+				find(row + 1); // 递归寻找下一个皇后的位置
 			}
 		}
 
