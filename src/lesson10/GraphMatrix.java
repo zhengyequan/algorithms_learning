@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class GraphMatrix<T> {
@@ -239,6 +240,46 @@ public class GraphMatrix<T> {
 		result.put("minWeightVertex", minWeightVertex);
 		result.put("minWeightEdge", minWeightEdge);
 		return result;
+	}
+
+	// 单源最短路径
+	public void singleShortestPath(Vertex<T> v) {
+		for (Vertex<T> item : vertexes) {
+			if (item == v) {
+				continue;
+			}
+
+			int shortestDis = innerShortestPath(v, item);
+			System.out.println("distance (" + v.getData() + ", " + item.getData() + ") = " + shortestDis);
+		}
+	}
+
+	private int innerShortestPath(Vertex<T> v1, Vertex<T> v2) {
+		if (v2 == v1) {
+			return 0;
+		}
+
+		// v1的邻接顶点距离终点v2的距离
+		Map<Vertex<T>, Integer> map = new HashMap<Vertex<T>, Integer>();
+		for (Edge<T> e : edges) {
+			if (e.getFromVertex() == v1) {
+				map.put(e.getToVertex(), innerShortestPath(e.getToVertex(), v2));
+			}
+		}
+
+		// 如果v1没有邻接顶点能抵达终点v2，则v1距离终点v2也是无穷远
+		if (map.isEmpty()) {
+			return Integer.MAX_VALUE;
+		}
+
+		// 找出邻接顶点中距离终点最小的顶点
+		int min = Integer.MAX_VALUE;
+		Set<Vertex<T>> vertexSet = map.keySet();
+		for (Vertex<T> item : vertexSet) {
+			min = map.get(item) < min ? map.get(item) : min;
+		}
+
+		return min < Integer.MAX_VALUE ? (min + 1) : Integer.MAX_VALUE;
 	}
 
 	// 重置顶点为未曾被访问状态

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class GraphTest {
 	public static void main(String[] args) {
-		testMST();
+		testSingleShortestPath();
 	}
 
 	public static void DFSTest() {
@@ -102,5 +102,37 @@ public class GraphTest {
 		}
 		System.out.println(mstEdges);
 		System.out.println(weight);
+	}
+
+	public static void testSingleShortestPath() {
+		GraphMatrix<String> g = new GraphMatrix<String>();
+		g.setDirected(true);
+		g.addVertex("A");
+		g.addVertex("B");
+		g.addVertex("C");
+		g.addVertex("D");
+		g.addVertex("E");
+		g.addVertex("F");
+		g.addVertex("G");
+		g.addVertex("H");
+		g.addVertex("I");
+
+		g.addEdge(g.getVertex(0), g.getVertex(1));
+		g.addEdge(g.getVertex(0), g.getVertex(5));
+		g.addEdge(g.getVertex(1), g.getVertex(2));
+		g.addEdge(g.getVertex(1), g.getVertex(6));
+		g.addEdge(g.getVertex(1), g.getVertex(8));
+		g.addEdge(g.getVertex(2), g.getVertex(3));
+		g.addEdge(g.getVertex(2), g.getVertex(8));
+		// g.addEdge(g.getVertex(3), g.getVertex(4));
+		g.addEdge(g.getVertex(3), g.getVertex(6));
+		g.addEdge(g.getVertex(3), g.getVertex(7));
+		g.addEdge(g.getVertex(3), g.getVertex(8));
+		// g.addEdge(g.getVertex(4), g.getVertex(5));
+		// g.addEdge(g.getVertex(4), g.getVertex(7));
+		g.addEdge(g.getVertex(5), g.getVertex(6));
+		g.addEdge(g.getVertex(6), g.getVertex(7));
+
+		g.singleShortestPath(g.getVertex(0));
 	}
 }
