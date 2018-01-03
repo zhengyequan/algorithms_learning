@@ -254,7 +254,7 @@ public class GraphMatrix<T> {
 		}
 	}
 
-	private int innerShortestPath(Vertex<T> v1, Vertex<T> v2) {
+	public int innerShortestPath(Vertex<T> v1, Vertex<T> v2) {
 		if (v2 == v1) {
 			return 0;
 		}

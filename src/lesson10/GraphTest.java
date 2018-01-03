@@ -133,6 +133,7 @@ public class GraphTest {
 		g.addEdge(g.getVertex(5), g.getVertex(6));
 		g.addEdge(g.getVertex(6), g.getVertex(7));
 
-		g.singleShortestPath(g.getVertex(0));
+	//	g.singleShortestPath(g.getVertex(0));
+		System.out.println(g.innerShortestPath(g.getVertex(0), g.getVertex(5)));
 	}
 }
