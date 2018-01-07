@@ -2,6 +2,9 @@ package lesson9;
 
 import java.util.Stack;
 
+/**
+ * 二叉搜索树
+ */
 public class BinaryTreeTest {
 	public static void main(String[] args) {
 		// BinaryTree<Integer> tree = new BinaryTree<Integer>();
@@ -14,18 +17,20 @@ public class BinaryTreeTest {
 		// tree.insert(1);
 		// tree.insert(4);
 
-		BinaryTree<String> tree = new BinaryTree<String>();
-		tree.insert("5");
-		tree.insert("6");
-		tree.insert("7");
-		tree.insert("8");
-		tree.insert("3");
-		tree.insert("2");
-		tree.insert("4");
-		tree.insert("1");
-		tree.traverseMid(tree.getRoot());
+		BinaryTree<Integer> tree = new BinaryTree<Integer>();
+		tree.insert(5);
+		tree.insert(12);
+		tree.insert(7);
+		tree.insert(8);
+		tree.insert(3);
+		tree.insert(13);
+		tree.insert(2);
+		tree.insert(4);
+		tree.insert(1);
+		tree.traversePre(tree.getRoot());
+		tree.delete(7);
 		System.out.println();
-		tree.iterateMid(tree.getRoot());
+		tree.traversePre(tree.getRoot());
 	}
 }
 
@@ -42,6 +47,64 @@ class BinaryTree<T extends Comparable<T>> {
 			root.insert(data);
 		}
 		return data;
+	}
+
+	public boolean delete(T data) {
+		if (root == null) {
+			throw new IllegalArgumentException("the tree is empty");
+		}
+
+		Node<T> node = root.get(root, data);
+		if (node == null) {
+			return false;
+		}
+
+		if (node == root) {
+			if (root.getRight() != null) {
+				Node<T> right = root.getRight();
+				Node<T> left = root.getLeft();
+				root = right; // 根节点右孩子
+
+				Node<T> temp = right;
+				while (temp.getLeft() != null) {
+				}
+				temp.setLeft(left); // 将原根节点的左孩子添加到原根节点的右孩子的最左下方
+				return true;
+			}
+
+			if (root.getLeft() != null) {
+				root = root.getLeft();
+				return true;
+			}
+			root = null; // 只有根节点的情况
+			return true;
+		}
+
+		if (node.getParent().getData().compareTo(data) >= 0) {
+			if (node.getRight() != null) {
+				node.getParent().setLeft(node.getRight());
+				Node<T> temp = node.getRight();
+				while (temp.getLeft() != null) {
+					temp = temp.getLeft();
+				}
+				temp.setLeft(node.getLeft());
+				return true;
+			}
+			node.getParent().setLeft(node.getLeft());
+		} else {
+			if (node.getLeft() != null) {
+				node.getParent().setRight(node.getLeft());
+				Node<T> temp = node.getLeft();
+				while (temp.getRight() != null) {
+					temp = temp.getRight();
+				}
+				temp.setRight(node.getRight());
+				return true;
+			}
+			node.getParent().setRight(node.getRight());
+		}
+		node = null;
+		return true;
 	}
 
 	public Node<?> getRoot() {
@@ -227,7 +290,28 @@ class Node<T extends Comparable<T>> {
 			}
 		}
 
+		node.setParent(this);
 		return data;
+	}
+
+	public Node<T> get(Node<T> from, T data) {
+		if (from == null) {
+			return null;
+		}
+
+		if (from.getData() == null && data == null || from.getData().compareTo(data) == 0) {
+			return from;
+		}
+
+		if (from.getData().compareTo(data) >= 0) {
+			return get(from.getLeft(), data);
+		}
+
+		if (from.getData().compareTo(data) < 0) {
+			return get(from.getRight(), data);
+		}
+
+		return null;
 	}
 
 	/**
